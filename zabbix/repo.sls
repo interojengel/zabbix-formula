@@ -71,6 +71,24 @@
     - name: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
     - source: {{ files_switch('zabbix',
                               ['/tmp/zabbix-official-repo.gpg']) }}
+                              
+{%- elif salt['grains.get']('os_family') == 'Suse' %}
+{{ id_prefix }}_repo:
+  pkgrepo.managed:
+    - name: zabbix
+    - humanname: OpenBuildService home:j-engel - $basearch
+    - baseurl: http://download.opensuse.org/repositories/home:/j-engel/openSUSE_{{ grains['osfullname'][0] }}_{{ grains['osrelease'][0] }}/$basearch/
+    - gpgcheck: 1
+    - gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OBS
+    - require:
+      - file: {{ id_prefix }}_repo_gpg_file
+
+{{ id_prefix }}_repo_gpg_file:
+  file.managed:
+    - name: /etc/pki/rpm-gpg/RPM-GPG-KEY-OBS
+    - source: {{ files_switch('zabbix',
+                              ['/tmp/OBS_home_j-engel.gpg']) }}
+                              
 {%- else %}
 {{ id_prefix }}_repo: {}
 {%- endif %}
