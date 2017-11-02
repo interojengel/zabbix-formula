@@ -10,6 +10,8 @@
 ### Option: PidFile
 #	Name of PID file.
 #
+# Mandatory: no
+# Default:
 {% if settings.get('pidfile', false) %}PidFile={{ settings.get('pidfile') }}{% endif %}
 
 {% if zabbix.version_repo|float >= 3.0 -%}
@@ -19,11 +21,17 @@
 #		file    - file specified with LogFile parameter
 #		console - standard output
 #
+# Mandatory: no
+# Default:
+# LogType=file
 {% if settings.get('logtype', false) %}LogType={{ settings.get('logtype') }}{% endif %}
 
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
+# Mandatory: no
+# Default:
+# Logfile=
 {% if settings.get('logfile', false) %}LogFile={{ settings.get('logfile', '/var/log/zabbix/zabbix_agentd.log') }}{% endif %}
 
 {% else %}
@@ -38,6 +46,10 @@
 #	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
+# Mandatory: no
+# Range: 0-1024
+# Default:
+# LogFileSize=1
 {% if settings.get('logfilesize', false) %}LogFileSize={{ settings.get('logfilesize') }}{% endif %}
 
 ### Option: DebugLevel
@@ -50,12 +62,20 @@
 {% if zabbix.version_repo|float >= 3.0 -%}
 #	5 - extended debugging (produces even more information)
 {% endif %}
+#
+# Mandatory: no
+# Range: 0-5
+# Default:
+# DebugLevel=3
 {% if settings.get('debuglevel', false) %}DebugLevel={{ settings.get('debuglevel') }}{% endif %}
 
 
 ### Option: SourceIP
 #	Source IP address for outgoing connections.
 #
+# Mandatory: no
+# Default:
+# SourceIP=
 {% if settings.get('sourceip', false) %}SourceIP={{ settings.get('sourceip') }}{% endif %}
 
 ### Option: EnableRemoteCommands
@@ -63,6 +83,9 @@
 #	0 - not allowed
 #	1 - allowed
 #
+# Mandatory: no
+# Default:
+# EnableRemoteCommands=0
 {% if settings.get('enableremotecommands', false) %}EnableRemoteCommands={{ settings.get('enableremotecommands') }}{% endif %}
 
 ### Option: LogRemoteCommands
@@ -70,6 +93,9 @@
 #	0 - disabled
 #	1 - enabled
 #
+# Mandatory: no
+# Default:
+# LogRemoteCommands=0
 {% if settings.get('logremotecommands', false) %}LogRemoteCommands={{ settings.get('logremotecommands') }}{% endif %}
 
 
@@ -80,23 +106,36 @@
 #	Incoming connections will be accepted only from the hosts listed here.
 #	If IPv6 support is enabled then '127.0.0.1', '::127.0.0.1', '::ffff:127.0.0.1' are treated equally.
 #
+# Mandatory: no
+# Default:
+# Server=
 Server={{ settings.get('server', ['localhost'])|join(',') }}
 
 ### Option: ListenPort
 #	Agent will listen on this port for connections from the server.
 #
+# Mandatory: no
+# Range: 1024-32767
+# Default:
+# ListenPort=10050
 {% if settings.get('listenport', false) %}ListenPort={{ settings.get('listenport') }}{% endif %}
 
 ### Option: ListenIP
 #	List of comma delimited IP addresses that the agent should listen on.
 #	First IP address is sent to Zabbix server if connecting to it to retrieve list of active checks.
 #
+# Mandatory: no
+# Default:
+# ListenIP=0.0.0.0
 {% if settings.get('listenip', false) %}ListenIP={{ settings.get('listenip') }}{% endif %}
 
 ### Option: StartAgents
 #	Number of pre-forked instances of zabbix_agentd that process passive checks.
 #	If set to 0, disables passive checks and the agent will not listen on any TCP port.
 #
+# Mandatory: no
+# Default:
+# StartAgents=3
 {% if settings.get('startagents', false) %}StartAgents={{ settings.get('startagents') }}{% endif %}
 
 ##### Active checks related
@@ -109,6 +148,9 @@ Server={{ settings.get('server', ['localhost'])|join(',') }}
 #	If this parameter is not specified, active checks are disabled.
 #	Example: ServerActive=127.0.0.1:20051,zabbix.domain,[::1]:30051,::1,[12fc::1]
 #
+# Mandatory: no
+# Default:
+# ServerActive=
 {% if settings.get('serveractive', false) %}ServerActive={{ settings.get('serveractive')|join(',') }}{% endif %}
 
 ### Option: Hostname
@@ -116,12 +158,18 @@ Server={{ settings.get('server', ['localhost'])|join(',') }}
 #	Required for active checks and must match hostname as configured on the server.
 #	Value is acquired from HostnameItem if undefined.
 #
+# Mandatory: no
+# Default:
+# Hotsname=
 Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 
 ### Option: HostnameItem
 #	Item used for generating Hostname if it is undefined. Ignored if Hostname is defined.
 #	Does not support UserParameters or aliases.
 #
+# Mandatory: no
+# Default:
+# HostnameItem=system.hostname
 {% if settings.get('hostnameitem', false) %}HostnameItem={{ settings.get('hostnameitem') }}{% endif %}
 
 ### Option: HostMetadata
@@ -130,6 +178,10 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	An agent will issue an error and not start if the value is over limit of 255 characters.
 #	If not defined, value will be acquired from HostMetadataItem.
 #
+# Mandatory: no
+# Range: 0-255 characters
+# Default:
+# HostMetadata=
 {% if settings.get('hostmetadata', false) %}HostMetadata={{ settings.get('hostmetadata') }}{% endif %}
 
 ### Option: HostMetadataItem
@@ -139,22 +191,37 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	the value returned by specified item is over limit of 255 characters.
 #	This option is only used when HostMetadata is not defined.
 #
+# Mandatory: no
+# Default:
+# HostMetadataItem=
 {% if settings.get('hostmetadataitem', false) %}HostMetadataItem={{ settings.get('hostmetadataitem') }}{% endif %}
 
 ### Option: RefreshActiveChecks
 #	How often list of active checks is refreshed, in seconds.
 #
+# Mandatory: no
+# Range: 60-3600
+# Default:
+# RefreshActiveChecks=120
 {% if settings.get('refreshactivechecks', false) %}RefreshActiveChecks={{ settings.get('refreshactivechecks') }}{% endif %}
 
 ### Option: BufferSend
 #	Do not keep data longer than N seconds in buffer.
 #
+# Mandatory: no
+# Range: 1-3600
+# Default:
+# BufferSend=5
 {% if settings.get('buffersend', false) %}BufferSend={{ settings.get('buffersend') }}{% endif %}
 
 ### Option: BufferSize
 #	Maximum number of values in a memory buffer. The agent will send
 #	all collected data to Zabbix Server or Proxy if the buffer is full.
 #
+# Mandatory: no
+# Range: 2-65536
+# Default:
+# BufferSize=100
 {% if settings.get('buffersize', false) %}BufferSize={{ settings.get('buffersize') }}{% endif %}
 
 ### Option: MaxLinesPerSecond
@@ -163,6 +230,10 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	The provided value will be overridden by the parameter 'maxlines',
 #	provided in 'log' or 'logrt' item keys.
 #
+# Mandatory: no
+# Range: 1-1000
+# Default:
+# MaxLinesPerSecond=20
 {% if settings.get('maxlinespersecond', false) %}MaxLinesPerSecond={{ settings.get('maxlinespersecond') }}{% endif %}
 
 ############ ADVANCED PARAMETERS #################
@@ -176,11 +247,18 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	Now shorthand key zabbix.userid may be used to retrieve data.
 #	Aliases can be used in HostMetadataItem but not in HostnameItem parameters.
 #
+# Mandatory: no
+# Range:
+# Default:
 {% if settings.get('zabbix_alias', false) %}Alias={{ settings.get('zabbix_alias') }}{% endif %}
 
 ### Option: Timeout
 #	Spend no more than Timeout seconds on processing
 #
+# Mandatory: no
+# Range: 1-30
+# Default:
+# Timeout=3
 {% if settings.get('timeout', false) %}Timeout={{ settings.get('timeout') }}{% endif %}
 
 ### Option: AllowRoot
@@ -190,6 +268,9 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	0 - do not allow
 #	1 - allow
 #
+# Mandatory: no
+# Default:
+# AllowRoot=0
 {% if settings.get('allowroot', false) %}AllowRoot={{ settings.get('allowroot') }}{% endif %}
 
 {% if zabbix.version_repo|float >= 2.4 -%}
@@ -197,6 +278,9 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
 #
+# Mandatory: no
+# Default:
+# User=zabbix
 {% if settings.get('zabbix_user', false) %}User={{ settings.get('zabbix_user') }}{% endif %}
 
 {% endif %}
@@ -205,6 +289,9 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	You may include individual files or all files in a directory in the configuration file.
 #	Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
 #
+# Mandatory: no
+# Default:
+# Include=
 {% if settings.get('include', false) %}Include={{ settings.get('include') }}{% endif %}
 
 
@@ -218,6 +305,9 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	0 - do not allow
 #	1 - allow
 #
+# Mandatory: no
+# Default:
+# UnsafeUserParameters=0
 {% if settings.get('unsafeuserparameters', false) %}UnsafeUserParameters={{ settings.get('unsafeuserparameters') }}{% endif %}
 
 ### Option: UserParameter
@@ -225,6 +315,9 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	Format: UserParameter=<key>,<shell command>
 #	See 'zabbix_agentd' directory for examples.
 #
+# Mandatory: no
+# Default:
+# UserParameter=
 {% for userparameter in settings.get('userparameters', []) -%}
 UserParameter={{ userparameter }}
 {% endfor -%}
@@ -235,6 +328,9 @@ UserParameter={{ userparameter }}
 #	Full path to location of agent modules.
 #	Default depends on compilation options.
 #
+# Mandatory: no
+# Default:
+# LoadModulePath=${libdir}/modules
 {% if settings.get('loadmodulepath', false) %}LoadModulePath={{ settings.get('loadmodulepath') }}{% endif %}
 {% endif %}
 
@@ -244,11 +340,13 @@ UserParameter={{ userparameter }}
 #	The modules must be located in directory specified by LoadModulePath.
 #	It is allowed to include multiple LoadModule parameters.
 #
+# Mandatory: no
+# Default:
+# LoadModule=
 {% for loadmodule in settings.get('loadmodules', []) -%}
 LoadModule={{ loadmodule }}
 {% endfor -%}
 
-{% if zabbix.version_repo|float >= 3.0 -%}
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -339,5 +437,4 @@ LoadModule={{ loadmodule }}
 # Default:
 # TLSPSKFile=
 {% if settings.get('tlspskfile', false) %}TLSPSKFile={{ settings.get('tlspskfile') }}{% endif %}
-{% endif %}
 {{ settings.get('extra_conf','') }}
