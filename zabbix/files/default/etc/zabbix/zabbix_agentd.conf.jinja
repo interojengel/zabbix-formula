@@ -220,7 +220,7 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	all collected data to Zabbix Server or Proxy if the buffer is full.
 #
 # Mandatory: no
-# Range: 2-65536
+# Range: 2-65535
 # Default:
 # BufferSize=100
 {% if settings.get('buffersize', false) %}BufferSize={{ settings.get('buffersize') }}{% endif %}
