@@ -134,6 +134,7 @@ Server={{ settings.get('server', ['localhost'])|join(',') }}
 #	If set to 0, disables passive checks and the agent will not listen on any TCP port.
 #
 # Mandatory: no
+# Range: 0-100
 # Default:
 # StartAgents=3
 {% if settings.get('startagents', false) %}StartAgents={{ settings.get('startagents') }}{% endif %}
@@ -306,6 +307,7 @@ Hostname={{ settings.get('hostname', salt['grains.get']('id')) }}
 #	1 - allow
 #
 # Mandatory: no
+# Range: 0-1
 # Default:
 # UnsafeUserParameters=0
 {% if settings.get('unsafeuserparameters', false) %}UnsafeUserParameters={{ settings.get('unsafeuserparameters') }}{% endif %}
@@ -347,6 +349,7 @@ UserParameter={{ userparameter }}
 LoadModule={{ loadmodule }}
 {% endfor -%}
 
+{% if zabbix.version_repo|float >= 3.0 -%}
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -437,4 +440,5 @@ LoadModule={{ loadmodule }}
 # Default:
 # TLSPSKFile=
 {% if settings.get('tlspskfile', false) %}TLSPSKFile={{ settings.get('tlspskfile') }}{% endif %}
+{% endif %}
 {{ settings.get('extra_conf','') }}
